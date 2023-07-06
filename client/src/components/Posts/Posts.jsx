@@ -1,16 +1,37 @@
 import React from 'react';
 import Post from './Post/Post';
 import { useSelector } from 'react-redux';
+import { Grid, CircularProgress, Box, Typography } from '@mui/material';
+import postsStyles from './styles';
 
-const Posts = () => {
+const Posts = ({ setCurrentId }) => {
   // getting the state from the redux store
-  const { postsList } = useSelector((state) => state.posts);
-  console.log(postsList);
+  const { postsList, isLoading } = useSelector((state) => state.posts);
+  // console.log(postsList);
   return (
     <>
-      <h1>POSTS</h1>
-      <Post />
-      <Post />
+      {isLoading ? (
+        <Box sx={postsStyles.sxProgressContainer}>
+          <CircularProgress />
+          <br />
+          <Typography variant="h5" sx={postsStyles.sxLoadingLabel}>
+            Loading...
+          </Typography>
+        </Box>
+      ) : (
+        <Grid
+          sx={postsStyles.sxContainer}
+          container
+          alignItems="stretch"
+          spacing={3}
+        >
+          {postsList.map((post) => (
+            <Grid key={post._id} item xs={12} sm={6}>
+              <Post post={post} setCurrentId={setCurrentId} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </>
   );
 };

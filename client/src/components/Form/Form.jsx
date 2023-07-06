@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@mui/material';
 import { sxPaper, sxButtonSubmit, sxTextField } from './styles';
 import imageToBase64, { clearFileName } from './../../utils/imageToBas64.js';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
-import { useDispatch } from 'react-redux';
-import { createPost } from '../../features/posts/postsSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { createPost, updatePost } from '../../features/posts/postsSlice.js';
 
-const Form = () => {
+const Form = ({ currentId, setCurrentId }) => {
+  const postToUpdate = useSelector((state) =>
+    currentId
+      ? state.posts.postsList.find((post) => post._id === currentId)
+      : null
+  );
+
   const initialPostData = {
     creator: '',
     title: '',
@@ -16,6 +22,12 @@ const Form = () => {
   };
   const dispatch = useDispatch();
   const [postData, setPostData] = useState(initialPostData);
+
+  useEffect(() => {
+    if (postToUpdate) {
+      setPostData(postToUpdate);
+    }
+  }, [postToUpdate]);
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -27,14 +39,22 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //checking if the values of the object submitted are all empty
+    // console.log(postData);
     if (!Object.values(postData).every((x) => x === '')) {
-      dispatch(createPost(postData));
+      //checking if the values of the object submitted are all empty
+      if (currentId) {
+        //refer to postSlice.js for this function
+        dispatch(updatePost({ id: currentId, updatedPost: postData }));
+      } else {
+        dispatch(createPost(postData));
+      }
+      clearForm();
     }
   };
 
   const clearForm = () => {
     setPostData(initialPostData);
+    setCurrentId(null);
     clearFileName();
   };
   // console.log(postData);
@@ -47,7 +67,9 @@ const Form = () => {
         className="form"
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">Echo Your Adventure</Typography>
+        <Typography variant="h6">
+          {currentId ? 'Editing' : 'Echo'}Your Adventure
+        </Typography>
         <TextField
           sx={sxTextField}
           name="creator"
@@ -79,7 +101,7 @@ const Form = () => {
           sx={sxTextField}
           name="tags"
           variant="outlined"
-          label="Tags"
+          label="Tags (comma separated)"
           fullWidth
           value={postData.tags}
           onChange={handleChange}
