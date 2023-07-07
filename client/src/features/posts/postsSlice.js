@@ -38,6 +38,17 @@ export const updatePost = createAsyncThunk(
     }
   }
 );
+export const deletePost = createAsyncThunk(
+  'posts/deletePost',
+  async (id, thunkAPI) => {
+    try {
+      const { data } = await api.deletePost(id);
+      return data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(`${err.message}`);
+    }
+  }
+);
 
 const initialState = {
   postsList: [],
@@ -73,12 +84,20 @@ const postsSlice = createSlice({
         state.postsList = [...state.postsList, action.payload];
       })
       .addCase(updatePost.fulfilled, (state, action) => {
-        state.postsList.map((post) =>
+        state.postsList = state.postsList.map((post) =>
           post._id === action.payload._id ? action.payload : post
+        );
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.postsList = state.postsList.filter(
+          (post) => post._id !== action.payload._id
         );
       });
   },
 });
+
+// i am updating the local state as soon as the api request is fulfilled.
+// so no need to grab the postsList every time from database.
 
 export const { setCurrentId } = postsSlice.actions;
 

@@ -7,7 +7,7 @@ import {
   Alert,
   AlertTitle,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Form from './components/Form/Form';
 import Posts from './components/Posts/Posts';
@@ -17,13 +17,12 @@ import './index.css';
 import { sxAppBar, sxHeading } from './styles.js';
 
 const App = () => {
-  const [currentId, setCurrentId] = useState(null);
   const { errorMessage } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   // getting all the posts from the api server
   useEffect(() => {
     dispatch(getPostsList());
-  }, [currentId, dispatch]);
+  }, [dispatch]);
 
   return (
     <>
@@ -56,10 +55,10 @@ const App = () => {
                 // gap={10}
               >
                 <Grid item xs={12} sm={7}>
-                  <Posts setCurrentId={setCurrentId} />
+                  <Posts />
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                  <Form currentId={currentId} setCurrentId={setCurrentId} />
+                  <Form />
                 </Grid>
               </Grid>
             </Container>

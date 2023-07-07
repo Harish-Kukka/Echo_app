@@ -5,13 +5,13 @@ import imageToBase64, { clearFileName } from './../../utils/imageToBas64.js';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { createPost, updatePost } from '../../features/posts/postsSlice.js';
+import { setCurrentId } from '../../features/posts/postsSlice.js';
 
-const Form = ({ currentId, setCurrentId }) => {
-  const postToUpdate = useSelector((state) =>
-    currentId
-      ? state.posts.postsList.find((post) => post._id === currentId)
-      : null
-  );
+const Form = () => {
+  const { currentId, postsList } = useSelector((state) => state.posts);
+  const postToUpdate = currentId
+    ? postsList.find((post) => post._id === currentId)
+    : null;
 
   const initialPostData = {
     creator: '',
@@ -54,7 +54,7 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const clearForm = () => {
     setPostData(initialPostData);
-    setCurrentId(null);
+    dispatch(setCurrentId(0));
     clearFileName();
   };
   // console.log(postData);
@@ -68,7 +68,7 @@ const Form = ({ currentId, setCurrentId }) => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
-          {currentId ? 'Editing' : 'Echo'}Your Adventure
+          {currentId ? 'Editing ' : 'Echo '}Your Adventure
         </Typography>
         <TextField
           sx={sxTextField}
@@ -135,7 +135,7 @@ const Form = ({ currentId, setCurrentId }) => {
         <Button
           className="clearButton"
           variant="contained"
-          color="error"
+          color="warning"
           size="small"
           onClick={clearForm}
           fullWidth
