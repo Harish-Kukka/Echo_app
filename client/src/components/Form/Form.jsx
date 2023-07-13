@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@mui/material';
-import { sxPaper, sxButtonSubmit, sxTextField } from './styles';
+import formStyles from './styles';
 import imageToBase64, { clearFileName } from './../../utils/imageToBas64.js';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,17 +31,20 @@ const Form = () => {
 
   const handleChange = (e) => {
     const name = e.target.name;
+    let value = e.target.value;
+    if (name === 'tags') {
+      value = value.split(',');
+    }
     setPostData({
       ...postData,
-      [name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(postData);
+    //checking if the values of the object submitted are all empty
     if (!Object.values(postData).every((x) => x === '')) {
-      //checking if the values of the object submitted are all empty
       if (currentId) {
         //refer to postSlice.js for this function
         dispatch(updatePost({ id: currentId, updatedPost: postData }));
@@ -57,10 +60,9 @@ const Form = () => {
     dispatch(setCurrentId(0));
     clearFileName();
   };
-  // console.log(postData);
 
   return (
-    <Paper sx={sxPaper}>
+    <Paper sx={formStyles.sxPaper}>
       <form
         autoComplete="off"
         noValidate
@@ -71,7 +73,7 @@ const Form = () => {
           {currentId ? 'Editing ' : 'Echo '}Your Adventure
         </Typography>
         <TextField
-          sx={sxTextField}
+          sx={formStyles.sxTextField}
           name="creator"
           variant="outlined"
           label="Creator"
@@ -80,7 +82,7 @@ const Form = () => {
           onChange={handleChange}
         />
         <TextField
-          sx={sxTextField}
+          sx={formStyles.sxTextField}
           name="title"
           variant="outlined"
           label="Title"
@@ -89,7 +91,7 @@ const Form = () => {
           onChange={handleChange}
         />
         <TextField
-          sx={sxTextField}
+          sx={formStyles.sxTextField}
           name="message"
           variant="outlined"
           label="Message"
@@ -98,7 +100,7 @@ const Form = () => {
           onChange={handleChange}
         />
         <TextField
-          sx={sxTextField}
+          sx={formStyles.sxTextField}
           name="tags"
           variant="outlined"
           label="Tags (comma separated)"
@@ -123,7 +125,7 @@ const Form = () => {
           <p id="fileName"></p>
         </div>
         <Button
-          sx={sxButtonSubmit}
+          sx={formStyles.sxButtonSubmit}
           variant="contained"
           color="primary"
           size="large"

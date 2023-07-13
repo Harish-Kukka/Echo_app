@@ -1,14 +1,16 @@
-export const sxPaper = {
-  padding: 2,
-};
-
-export const sxButtonSubmit = {
-  marginTop: 1,
-  marginBottom: 2,
-};
-
-export const sxTextField = {
-  '&.MuiTextField-root': {
-    margin: 1,
+const formStyles = {
+  sxPaper: {
+    padding: 2,
+  },
+  sxButtonSubmit: {
+    marginTop: 1,
+    marginBottom: 2,
+  },
+  sxTextField: {
+    '&.MuiTextField-root': {
+      margin: 1,
+    },
   },
 };
+
+export default formStyles;

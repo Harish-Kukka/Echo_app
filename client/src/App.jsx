@@ -14,9 +14,10 @@ import Posts from './components/Posts/Posts';
 import { getPostsList } from './features/posts/postsSlice';
 import echo from './images/echo.png';
 import './index.css';
-import { sxAppBar, sxHeading } from './styles.js';
+import AppStyles from './styles.js';
 
 const App = () => {
+  const appStyles = AppStyles();
   const { errorMessage } = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   // getting all the posts from the api server
@@ -34,8 +35,8 @@ const App = () => {
         </Alert>
       ) : (
         <Container maxWidth="lg">
-          <AppBar sx={sxAppBar} position="static" color="inherit">
-            <Typography sx={sxHeading} variant="h2" align="center">
+          <AppBar sx={appStyles.sxAppBar} position="static" color="inherit">
+            <Typography sx={appStyles.sxHeading} variant="h2" align="center">
               Echo
             </Typography>
             <img
@@ -48,11 +49,11 @@ const App = () => {
           <Grow in>
             <Container>
               <Grid
+                sx={appStyles.sxMainContainer}
                 container
                 justifyContent="space-between"
                 alignItems="stretch"
                 spacing={3}
-                // gap={10}
               >
                 <Grid item xs={12} sm={7}>
                   <Posts />

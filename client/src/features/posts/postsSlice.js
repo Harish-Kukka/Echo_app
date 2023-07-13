@@ -50,6 +50,18 @@ export const deletePost = createAsyncThunk(
   }
 );
 
+export const likePost = createAsyncThunk(
+  'posts/likePost',
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await api.likePost(id);
+      return data;
+    } catch (err) {
+      return rejectWithValue(`${err.message}`);
+    }
+  }
+);
+
 const initialState = {
   postsList: [],
   isLoading: true,
@@ -92,11 +104,16 @@ const postsSlice = createSlice({
         state.postsList = state.postsList.filter(
           (post) => post._id !== action.payload._id
         );
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        state.postsList = state.postsList.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        );
       });
   },
 });
 
-// i am updating the local state as soon as the api request is fulfilled.
+// i am updating the local postsList as soon as the api request is fulfilled.
 // so no need to grab the postsList every time from database.
 
 export const { setCurrentId } = postsSlice.actions;

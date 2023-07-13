@@ -1,17 +1,16 @@
 const postStyles = {
   media: {
-    height: 0,
     paddingTop: '56.25%',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     backgroundBlendMode: 'darken',
   },
   card: {
+    height: '100%',
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     borderRadius: '15px',
-    height: '100%',
-    position: 'relative',
   },
   overlay: {
     position: 'absolute',
@@ -28,7 +27,7 @@ const postStyles = {
   details: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '10px 10px 0',
+    margin: '20px',
   },
   cardActions: {
     padding: '0 16px 8px 16px',
@@ -36,7 +35,7 @@ const postStyles = {
     justifyContent: 'space-between',
   },
   title: {
-    padding: '16px 16px 0',
+    padding: '0 16px',
   },
 };
 
