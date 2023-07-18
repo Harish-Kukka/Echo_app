@@ -14,15 +14,11 @@ body {
 .mainAlert {
     width: 60vw;
     position: absolute;
-    /* top: 50vh; */
+    top: 20vh;
     left: 20vw;
     color: red;
 }
 
-.heading__image {
-    margin-right: 15px;
-    width: 60px;
-}
 
 .form {
     display: flex;

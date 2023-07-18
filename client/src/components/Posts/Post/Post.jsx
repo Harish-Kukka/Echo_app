@@ -30,7 +30,7 @@ const Post = ({ post }) => {
         title={post.title}
       />
       <Box component="div" sx={postStyles.overlay}>
-        <Typography variant="h6">{post.creator}</Typography>
+        <Typography variant="h6">{post.name}</Typography>
         <Typography variant="body2">
           {moment(post.createdAt).fromNow()}
         </Typography>
@@ -68,7 +68,7 @@ const Post = ({ post }) => {
           }}
         >
           <ThumbUpAltIcon fontSize="small" />
-          &nbsp; Like &nbsp; {post.likeCount}
+          &nbsp; Like &nbsp; {post.likes.length}
         </Button>
         <Button
           size="small"

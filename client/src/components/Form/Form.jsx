@@ -9,12 +9,12 @@ import { setCurrentId } from '../../features/posts/postsSlice.js';
 
 const Form = () => {
   const { currentId, postsList } = useSelector((state) => state.posts);
+  const { isLogout } = useSelector((state) => state.auth);
   const postToUpdate = currentId
     ? postsList.find((post) => post._id === currentId)
     : null;
 
   const initialPostData = {
-    creator: '',
     title: '',
     message: '',
     tags: '',
@@ -22,6 +22,7 @@ const Form = () => {
   };
   const dispatch = useDispatch();
   const [postData, setPostData] = useState(initialPostData);
+  const user = !isLogout && JSON.parse(localStorage.getItem('userInfo'));
 
   useEffect(() => {
     if (postToUpdate) {
@@ -47,9 +48,14 @@ const Form = () => {
     if (!Object.values(postData).every((x) => x === '')) {
       if (currentId) {
         //refer to postSlice.js for this function
-        dispatch(updatePost({ id: currentId, updatedPost: postData }));
+        dispatch(
+          updatePost({
+            id: currentId,
+            updatedPost: postData,
+          })
+        );
       } else {
-        dispatch(createPost(postData));
+        dispatch(createPost({ ...postData, name: user?.result?.name }));
       }
       clearForm();
     }
@@ -60,6 +66,16 @@ const Form = () => {
     dispatch(setCurrentId(0));
     clearFileName();
   };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper sx={formStyles.sxPaper}>
+        <Typography variant="h6" align="center">
+          Please Sign In to create your own echo and like other&apos;s echo
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <Paper sx={formStyles.sxPaper}>
@@ -72,15 +88,6 @@ const Form = () => {
         <Typography variant="h6">
           {currentId ? 'Editing ' : 'Echo '}Your Adventure
         </Typography>
-        <TextField
-          sx={formStyles.sxTextField}
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={postData.creator}
-          onChange={handleChange}
-        />
         <TextField
           sx={formStyles.sxTextField}
           name="title"

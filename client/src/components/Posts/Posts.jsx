@@ -26,7 +26,7 @@ const Posts = () => {
         </Box>
       ) : !postsList.length ? (
         <Alert severity="info">
-          <AlertTitle>No Posts</AlertTitle>
+          <AlertTitle>No Echos</AlertTitle>
           Please create one from the FORM!
         </Alert>
       ) : (
