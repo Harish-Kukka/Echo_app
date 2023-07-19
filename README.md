@@ -11,7 +11,7 @@
 - [x] State management for such complex project
 - [x] Folder structure for better scaling of projects
 - [x] How to modularize the project so that you can pinpoint the error folder
-- [ ] Authentication
+- [x] Authentication (implemented it but it is not secure as i am using localStorage to persist the login)
 - [ ] Pagination
 - [ ] Commenting system
 

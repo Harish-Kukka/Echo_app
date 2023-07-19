@@ -9,7 +9,6 @@ import { setCurrentId } from '../../features/posts/postsSlice.js';
 
 const Form = () => {
   const { currentId, postsList } = useSelector((state) => state.posts);
-  const { isLogout } = useSelector((state) => state.auth);
   const postToUpdate = currentId
     ? postsList.find((post) => post._id === currentId)
     : null;
@@ -22,7 +21,7 @@ const Form = () => {
   };
   const dispatch = useDispatch();
   const [postData, setPostData] = useState(initialPostData);
-  const user = !isLogout && JSON.parse(localStorage.getItem('userInfo'));
+  const user = JSON.parse(localStorage.getItem('userInfo')) || null;
 
   useEffect(() => {
     if (postToUpdate) {
@@ -71,7 +70,7 @@ const Form = () => {
     return (
       <Paper sx={formStyles.sxPaper}>
         <Typography variant="h6" align="center">
-          Please Sign In to create your own echo and like other&apos;s echo
+          Please Sign In to create your own echo and like other&apos;s echo.
         </Typography>
       </Paper>
     );

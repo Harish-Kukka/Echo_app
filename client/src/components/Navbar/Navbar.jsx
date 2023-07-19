@@ -8,20 +8,36 @@ import {
   useTheme,
 } from '@mui/material';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { logoutUser } from '../../features/Auth/authSlice';
 import echo from '../../images/echo.png';
 import NavbarStyles from './styles';
+import { jwtTokenExpiry, googleTokenExpiry } from '../../utils/tokenExpiry.js';
 
 const Navbar = () => {
   const theme = useTheme();
   const navbarStyle = NavbarStyles(theme);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLogout } = useSelector((state) => state.auth);
+  const location = useLocation();
 
-  const user = !isLogout && JSON.parse(localStorage.getItem('userInfo'));
+  const user = JSON.parse(localStorage.getItem('userInfo')) || null;
+
+  const logout = () => {
+    dispatch(logoutUser());
+    navigate('/');
+    window.location.reload();
+  };
+
+  React.useEffect(() => {
+    const tokenArr = user?.token.split(' ');
+    if (tokenArr) {
+      tokenArr.length > 1
+        ? googleTokenExpiry(tokenArr[1], logout)
+        : jwtTokenExpiry(tokenArr[0], logout);
+    }
+  }, [location]);
 
   return (
     <AppBar sx={navbarStyle.sxappBar} position="static" color="inherit">
@@ -37,7 +53,7 @@ const Navbar = () => {
         {user ? (
           <Box sx={navbarStyle.sxprofile} component="div">
             <Avatar
-              sx={navbarStyle.purple}
+              sx={navbarStyle.sxpurple}
               src={user.result.picture}
               alt={user.result.name}
             >
@@ -52,10 +68,7 @@ const Navbar = () => {
               color="warning"
               component={Link}
               to="/"
-              onClick={() => {
-                dispatch(logoutUser());
-                navigate('/');
-              }}
+              onClick={logout}
             >
               Logout
             </Button>

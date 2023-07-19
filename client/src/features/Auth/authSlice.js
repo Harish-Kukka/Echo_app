@@ -21,13 +21,13 @@ export const userSignIn = createAsyncThunk(
       // log in the user
       const { data } = await api.signIn(Data.formData);
       //navigate to the homepage
-      // Data.navigate('/');
       return data;
     } catch (error) {
       return rejectWithValue(`${error.message}`);
     }
   }
 );
+
 export const userSignUp = createAsyncThunk(
   'auth/userSignUp',
   async (Data, { rejectWithValue }) => {
@@ -35,7 +35,6 @@ export const userSignUp = createAsyncThunk(
       // register and login the user
       const { data } = await api.signUp(Data.formData);
       // navigate to the homepage
-      // Data.navigate('/');
       return data;
     } catch (error) {
       return rejectWithValue(`${error.message}`);
@@ -45,7 +44,6 @@ export const userSignUp = createAsyncThunk(
 
 const initialState = {
   authData: null,
-  isLogout: true,
 };
 
 const authSlice = createSlice({
@@ -54,12 +52,10 @@ const authSlice = createSlice({
   reducers: {
     loginUser: (state) => {
       localStorage.setItem('userInfo', JSON.stringify(state.authData));
-      state.isLogout = false;
     },
     logoutUser: (state) => {
       localStorage.clear();
       state.authData = null;
-      state.isLogout = true;
     },
   },
   extraReducers: (builder) => {

@@ -16,9 +16,8 @@ const auth = async (req, res, next) => {
           },
         }
       );
-      req.userId = decodedData?.sub;
+      req.userId = decodedData?.data.sub;
     } else {
-      console.log(token);
       decodedData = jwt.verify(token_data[1], process.env.JWT_SECRET);
       req.userId = decodedData?.id;
     }

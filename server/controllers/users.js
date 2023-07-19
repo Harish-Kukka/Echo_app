@@ -19,7 +19,7 @@ export const signIn = async (req, res) => {
     const token = jwt.sign(
       { id: existingUser._id, email: existingUser.email },
       process.env.JWT_SECRET,
-      { expiresIn: '1h', algorithm: 'HS512' }
+      { expiresIn: '1h' }
     );
     res.status(200).json({ result: existingUser, token });
   } catch (error) {
@@ -46,7 +46,7 @@ export const signUp = async (req, res) => {
     const token = jwt.sign(
       { id: newUser._id, email: newUser.email },
       process.env.JWT_SECRET,
-      { expiresIn: '1h', algorithm: 'HS512' }
+      { expiresIn: '1h' }
     );
     return res.status(200).json({ result: newUser, token });
   } catch (error) {

@@ -32,7 +32,14 @@ const Posts = () => {
       ) : (
         <Grid container alignItems="stretch" spacing={3}>
           {postsList.map((post) => (
-            <Grid key={post._id} item xs={12} sm={12} md={6}>
+            <Grid
+              key={post._id}
+              sx={postsStyles.sxGridItem}
+              item
+              xs={12}
+              sm={12}
+              md={6}
+            >
               <Post post={post} />
             </Grid>
           ))}

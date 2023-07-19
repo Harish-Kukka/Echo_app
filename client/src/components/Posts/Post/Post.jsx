@@ -8,10 +8,10 @@ import {
   Box,
   Typography,
 } from '@mui/material';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import postStyles from './styles.js';
+import Likes from './Likes.jsx';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { setCurrentId } from '../../../features/posts/postsSlice.js';
@@ -19,6 +19,10 @@ import { deletePost, likePost } from '../../../features/posts/postsSlice.js';
 
 const Post = ({ post }) => {
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem('userInfo'));
+  const isCreator =
+    user?.result?._id === post?.creator || user?.result?.sub === post?.creator;
+
   return (
     <Card sx={postStyles.card}>
       <CardMedia
@@ -35,17 +39,20 @@ const Post = ({ post }) => {
           {moment(post.createdAt).fromNow()}
         </Typography>
       </Box>
-      <Box component="div" sx={postStyles.overlay2}>
-        <Button
-          sx={{ color: 'white' }}
-          size="small"
-          onClick={() => {
-            dispatch(setCurrentId(post._id));
-          }}
-        >
-          <MoreVertIcon />
-        </Button>
-      </Box>
+      {isCreator && (
+        <Box component="div" sx={postStyles.overlay2}>
+          <Button
+            sx={{ color: 'white' }}
+            size="small"
+            onClick={() => {
+              dispatch(setCurrentId(post._id));
+            }}
+          >
+            <MoreVertIcon />
+          </Button>
+        </Box>
+      )}
+
       <Box component="div" sx={postStyles.details}>
         <Typography variant="body2" color="textSecondary">
           {post.tags.map((tag) => `#${tag} `)}
@@ -66,19 +73,21 @@ const Post = ({ post }) => {
           onClick={() => {
             dispatch(likePost(post._id));
           }}
+          disabled={!user?.result}
         >
-          <ThumbUpAltIcon fontSize="small" />
-          &nbsp; Like &nbsp; {post.likes.length}
+          <Likes post={post} user={user} />
         </Button>
-        <Button
-          size="small"
-          color="primary"
-          onClick={() => {
-            dispatch(deletePost(post._id));
-          }}
-        >
-          <DeleteIcon fontSize="small" color="warning" /> Delete
-        </Button>
+        {isCreator && (
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => {
+              dispatch(deletePost(post._id));
+            }}
+          >
+            <DeleteForeverIcon fontSize="small" color="warning" /> Delete
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
