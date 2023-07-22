@@ -89,7 +89,6 @@ const postsSlice = createSlice({
       })
       .addCase(getPostsList.rejected, (state, action) => {
         state.isLoading = false;
-        console.log(action.payload);
         state.errorMessage = action.payload;
       })
       .addCase(createPost.fulfilled, (state, action) => {

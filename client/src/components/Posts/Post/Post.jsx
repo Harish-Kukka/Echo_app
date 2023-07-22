@@ -85,7 +85,7 @@ const Post = ({ post }) => {
               dispatch(deletePost(post._id));
             }}
           >
-            <DeleteForeverIcon fontSize="small" color="warning" /> Delete
+            <DeleteForeverIcon fontSize="small" color="warning" />
           </Button>
         )}
       </CardActions>

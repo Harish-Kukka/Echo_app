@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Container } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-// import Navbar from './Navbar/Navbar';
+import Navbar from './Navbar/Navbar';
 
 const Layout = () => {
   const { errorMessage } = useSelector((state) => state.posts);
@@ -16,7 +16,7 @@ const Layout = () => {
         </Alert>
       ) : (
         <>
-          {/* <Navbar /> */}
+          <Navbar />
           <Outlet />
         </>
       )}

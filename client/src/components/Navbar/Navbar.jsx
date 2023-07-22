@@ -11,7 +11,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { logoutUser } from '../../features/Auth/authSlice';
-import echo from '../../images/echo.png';
 import NavbarStyles from './styles';
 import { jwtTokenExpiry, googleTokenExpiry } from '../../utils/tokenExpiry.js';
 
@@ -27,7 +26,6 @@ const Navbar = () => {
   const logout = () => {
     dispatch(logoutUser());
     navigate('/');
-    window.location.reload();
   };
 
   React.useEffect(() => {
@@ -42,12 +40,16 @@ const Navbar = () => {
   return (
     <AppBar sx={navbarStyle.sxappBar} position="static" color="inherit">
       <Box sx={navbarStyle.sxbrandContainer} component={Link} to="/">
-        <Box sx={navbarStyle.sximage} component="span">
-          <img src={echo} alt="Echo-logo.png" height="60" />
-        </Box>
-        <Typography sx={navbarStyle.sxheading} variant="h2" align="center">
-          Echo
-        </Typography>
+        <img
+          src="https://i.ibb.co/sPqsbY0/echo-logo.png"
+          alt="Echo-logo.png"
+          height="40"
+        />
+        <img
+          src="https://i.ibb.co/pnxfJyG/echo-text.png"
+          alt="echo-text.png"
+          height="60"
+        />
       </Box>
       <Toolbar sx={navbarStyle.sxtoolbar}>
         {user ? (

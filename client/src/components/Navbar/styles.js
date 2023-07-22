@@ -11,14 +11,14 @@ const navbarStyles = (theme) => ({
     alignItems: 'center',
     padding: '10px 50px',
   },
-  sxheading: {
-    color: 'rgba(0,183,255, 1)',
-    fontWeight: 400,
-  },
-  sximage: {
-    marginRight: '15px',
-    float: 'right',
-  },
+  // sxheading: {
+  //   color: 'rgba(0,183,255, 1)',
+  //   fontWeight: 400,
+  // },
+  // sximage: {
+  //   marginRight: '15px',
+  //   float: 'right',
+  // },
   sxtoolbar: {
     display: 'flex',
     justifyContent: 'flex-end',

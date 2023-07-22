@@ -8,9 +8,9 @@ export const jwtTokenExpiry = (token, logout) => {
   }
 };
 
-export const googleTokenExpiry = (token, logout) => {
+export const googleTokenExpiry = async (token, logout) => {
   try {
-    const { data } = getUserInfo(token);
+    const { data } = await getUserInfo(token);
   } catch (error) {
     logout();
   }
