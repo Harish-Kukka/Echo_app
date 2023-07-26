@@ -3,6 +3,8 @@ const postStyles = {
     paddingTop: '56.25%',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     backgroundBlendMode: 'darken',
+    height: 200,
+    width: '100%',
   },
   card: {
     height: '100%',
@@ -36,6 +38,10 @@ const postStyles = {
   },
   title: {
     padding: '0 16px',
+  },
+  cardAction: {
+    display: 'block',
+    textAlign: 'initial',
   },
 };
 

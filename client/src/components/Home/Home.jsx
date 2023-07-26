@@ -1,23 +1,22 @@
 import {
+  AppBar,
+  Button,
   Container,
   Grid,
   Grow,
   Paper,
-  AppBar,
   TextField,
-  Button,
-  Chip,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { MuiChipsInput } from 'mui-chips-input';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { getPostsList } from '../../features/posts/postsSlice.js';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { getPostsBySearch } from '../../features/posts/postsSlice.js';
 import Form from '../Form/Form';
+import Paginate from '../Paginate/Paginate.jsx';
 import Posts from '../Posts/Posts';
 import homeStyles from './styles.js';
-import Paginate from '../Paginate/Paginate.jsx';
-import { MuiChipsInput } from 'mui-chips-input';
 
 const Home = () => {
   const theme = useTheme();
@@ -32,10 +31,6 @@ const Home = () => {
   const searchQuery = searchParams.get('searchQuery');
 
   const dispatch = useDispatch();
-  // getting all the posts from the api server
-  useEffect(() => {
-    dispatch(getPostsList());
-  }, [dispatch]);
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -44,20 +39,26 @@ const Home = () => {
     }
   };
 
-  const handleAdd = (tag) => {
+  const handleAddTags = (tag) => {
     const duplicateTag = tags.indexOf(tag);
     if (duplicateTag === -1) {
       setTags([...tags, tag]);
     }
   };
 
-  const handleDelete = (tagToDelete) => {
+  const handleDeleteTags = (tagToDelete) => {
     setTags(tags.filter((tag) => tag !== tagToDelete));
   };
 
   const searchPost = () => {
-    if (searchTerm.trim()) {
+    if (searchTerm.trim() || tags.length !== 0) {
       //dispatch -> fetch search post
+      dispatch(getPostsBySearch({ searchTerm, tags: tags.join(',') }));
+      navigate(
+        `/allPosts/search?searchQuery=${searchTerm || 'none'}&tags=${tags.join(
+          ','
+        )}`
+      );
     } else {
       navigate('/');
     }
@@ -89,15 +90,16 @@ const Home = () => {
                 fullWidth
                 onKeyDown={handleKeyDown}
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => setSearchTerm(e.target.value.trim())}
               />
               <MuiChipsInput
                 sx={{ margin: '10px 0' }}
                 label="Search Tags"
                 value={tags}
-                onAddChip={handleAdd}
-                onDeleteChip={handleDelete}
+                onAddChip={handleAddTags}
+                onDeleteChip={handleDeleteTags}
                 disableEdition
+                hideClearAll
                 renderChip={(Component, key, props) => {
                   return <Component {...props} color="primary" key={key} />;
                 }}
@@ -107,9 +109,11 @@ const Home = () => {
               </Button>
             </AppBar>
             <Form />
-            <Paper sx={styles.sxPagination} elevation={6}>
-              <Paginate />
-            </Paper>
+            {!searchQuery && !tags.length && (
+              <Paper sx={styles.sxPagination} elevation={6}>
+                <Paginate page={page} />
+              </Paper>
+            )}
           </Grid>
         </Grid>
       </Container>

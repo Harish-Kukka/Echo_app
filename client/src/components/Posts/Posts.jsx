@@ -27,7 +27,7 @@ const Posts = () => {
       ) : !postsList.length ? (
         <Alert severity="info">
           <AlertTitle>No Echos</AlertTitle>
-          Please create one from the FORM!
+          Please create one using the FORM!
         </Alert>
       ) : (
         <Grid container alignItems="stretch" spacing={3}>
@@ -39,6 +39,7 @@ const Posts = () => {
               xs={12}
               sm={12}
               md={6}
+              lg={4}
             >
               <Post post={post} />
             </Grid>

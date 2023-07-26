@@ -2,7 +2,7 @@ import { deepPurple } from '@mui/material/colors';
 
 //All the styles will go to the sx api
 const navbarStyles = (theme) => ({
-  sxappBar: {
+  appBar: {
     borderRadius: 15,
     margin: '30px 0',
     display: 'flex',
@@ -10,36 +10,55 @@ const navbarStyles = (theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '10px 50px',
+    [theme.breakpoints.down('sm')]: {
+      padding: '10px 20px',
+    },
   },
-  // sxheading: {
-  //   color: 'rgba(0,183,255, 1)',
-  //   fontWeight: 400,
-  // },
-  // sximage: {
-  //   marginRight: '15px',
-  //   float: 'right',
-  // },
-  sxtoolbar: {
+  image: {
+    marginLeft: '-10px',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+    // marginRight: '15px',
+    // float: 'right',
+  },
+  toolbar: {
     display: 'flex',
     justifyContent: 'flex-end',
     width: '400px',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      width: '160px',
+    },
   },
-  sxprofile: {
+  profile: {
     display: 'flex',
     justifyContent: 'space-between',
-    width: '400px',
+    width: '300px',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      width: 'auto',
+      // marginTop: 20,
+      justifyContent: 'center',
+    },
   },
-  sxuserName: {
+  userName: {
+    display: 'flex',
+    alignItems: 'center',
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  brandContainer: {
     display: 'flex',
     alignItems: 'center',
   },
-  sxbrandContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    textDecoration: 'none',
+  logout: {
+    marginLeft: '20px',
   },
-  sxpurple: {
+  purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
   },

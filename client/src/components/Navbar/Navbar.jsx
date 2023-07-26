@@ -6,6 +6,7 @@ import {
   Toolbar,
   Typography,
   useTheme,
+  Chip,
 } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -13,11 +14,12 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { logoutUser } from '../../features/Auth/authSlice';
 import NavbarStyles from './styles';
 import { jwtTokenExpiry, googleTokenExpiry } from '../../utils/tokenExpiry.js';
+import logo from '../../images/echo_logo.png';
+import logoText from '../../images/echo_text.png';
 
 const Navbar = () => {
   const theme = useTheme();
   const navbarStyle = NavbarStyles(theme);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -25,7 +27,6 @@ const Navbar = () => {
 
   const logout = () => {
     dispatch(logoutUser());
-    navigate('/');
   };
 
   React.useEffect(() => {
@@ -38,34 +39,32 @@ const Navbar = () => {
   }, [location]);
 
   return (
-    <AppBar sx={navbarStyle.sxappBar} position="static" color="inherit">
-      <Box sx={navbarStyle.sxbrandContainer} component={Link} to="/">
-        <img
-          src="https://i.ibb.co/sPqsbY0/echo-logo.png"
-          alt="Echo-logo.png"
-          height="40"
-        />
-        <img
-          src="https://i.ibb.co/pnxfJyG/echo-text.png"
+    <AppBar sx={navbarStyle.appBar} position="static" color="inherit">
+      <Box sx={navbarStyle.brandContainer} component={Link} to="/">
+        <img src={logo} alt="Echo-logo.png" height="45px" />
+        <Box
+          component="img"
+          sx={navbarStyle.image}
+          src={logoText}
           alt="echo-text.png"
-          height="60"
+          height="50px"
         />
       </Box>
-      <Toolbar sx={navbarStyle.sxtoolbar}>
+      <Toolbar sx={navbarStyle.toolbar}>
         {user ? (
-          <Box sx={navbarStyle.sxprofile} component="div">
+          <Box sx={navbarStyle.profile} component="div">
             <Avatar
-              sx={navbarStyle.sxpurple}
+              sx={navbarStyle.purple}
               src={user.result.picture}
               alt={user.result.name}
             >
               {user.result.name.charAt(0)}
             </Avatar>
-            <Typography sx={navbarStyle.sxuserName} variant="h6">
+            <Typography sx={navbarStyle.userName} variant="h6">
               {user.result.name}
             </Typography>
             <Button
-              sx={navbarStyle.sxlogout}
+              sx={navbarStyle.logout}
               variant="contained"
               color="warning"
               component={Link}

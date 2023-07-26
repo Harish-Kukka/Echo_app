@@ -3,9 +3,35 @@ import * as api from '../../api';
 
 export const getPostsList = createAsyncThunk(
   'posts/getPostsList',
-  async (_, thunkAPI) => {
+  async (page, thunkAPI) => {
     try {
-      const { data } = await api.fetchPosts();
+      const { data } = await api.fetchPosts(page);
+      return data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(`${err.message}`);
+    }
+  }
+);
+
+export const getPostsBySearch = createAsyncThunk(
+  'posts/getPostsBySearch',
+  async (searchQuery, thunkAPI) => {
+    try {
+      const {
+        data: { data },
+      } = await api.fetchPostsBySearch(searchQuery);
+      return data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(`${err.message}`);
+    }
+  }
+);
+
+export const getPostById = createAsyncThunk(
+  'posts/getPostById',
+  async (id, thunkAPI) => {
+    try {
+      const { data } = await api.fetchPostById(id);
       return data;
     } catch (err) {
       return thunkAPI.rejectWithValue(`${err.message}`);
@@ -15,9 +41,10 @@ export const getPostsList = createAsyncThunk(
 
 export const createPost = createAsyncThunk(
   'posts/createPost',
-  async (newPost, thunkAPI) => {
+  async ({ newPost, navigate }, thunkAPI) => {
     try {
       const { data } = await api.createPost(newPost);
+      navigate(`/allPosts/${data._id}`);
       return data;
     } catch (err) {
       return thunkAPI.rejectWithValue(`${err.message}`);
@@ -40,9 +67,10 @@ export const updatePost = createAsyncThunk(
 );
 export const deletePost = createAsyncThunk(
   'posts/deletePost',
-  async (id, thunkAPI) => {
+  async ({ id, navigate }, thunkAPI) => {
     try {
       const { data } = await api.deletePost(id);
+      navigate('/');
       return data;
     } catch (err) {
       return thunkAPI.rejectWithValue(`${err.message}`);
@@ -64,9 +92,12 @@ export const likePost = createAsyncThunk(
 
 const initialState = {
   postsList: [],
+  post: {},
   isLoading: true,
   errorMessage: '',
   currentId: 0,
+  currentPage: 1,
+  numberOfPages: 0,
 };
 
 const postsSlice = createSlice({
@@ -84,15 +115,49 @@ const postsSlice = createSlice({
       })
       .addCase(getPostsList.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.postsList = action.payload;
+        state.postsList = action.payload.data;
+        state.numberOfPages = action.payload.totalPages;
+        state.currentPage = action.payload.currentPage;
         state.errorMessage = '';
       })
       .addCase(getPostsList.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
       })
+      .addCase(getPostById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPostById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.post = action.payload;
+        state.errorMessage = '';
+      })
+      .addCase(getPostById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(getPostsBySearch.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getPostsBySearch.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.postsList = action.payload;
+        state.errorMessage = '';
+      })
+      .addCase(getPostsBySearch.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(createPost.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(createPost.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.postsList = [...state.postsList, action.payload];
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         state.postsList = state.postsList.map((post) =>

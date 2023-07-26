@@ -13,15 +13,17 @@ const App = () => {
     <Container maxWidth="xl">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/posts" replace={true} />} />
-          <Route path="posts">
+          <Route index element={<Navigate to="/allPosts" replace={true} />} />
+          <Route path="allPosts">
             <Route index element={<Home />} />
             <Route path="search" element={<Home />} />
             <Route path=":id" element={<PostDetails />} />
           </Route>
           <Route
             path="auth"
-            element={!user ? <Auth /> : <Navigate to="/posts" />}
+            element={
+              !user ? <Auth /> : <Navigate to="/allPosts" replace={true} />
+            }
           />
         </Route>
       </Routes>

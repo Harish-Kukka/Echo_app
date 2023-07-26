@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Paper } from '@mui/material';
-import formStyles from './styles';
-import imageToBase64, { clearFileName } from './../../utils/imageToBas64.js';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
+import { Button, Paper, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost, updatePost } from '../../features/posts/postsSlice.js';
-import { setCurrentId } from '../../features/posts/postsSlice.js';
+import { useNavigate } from 'react-router-dom';
+import {
+  createPost,
+  setCurrentId,
+  updatePost,
+} from '../../features/posts/postsSlice.js';
+import imageToBase64, { clearFileName } from './../../utils/imageToBas64.js';
+import formStyles from './styles';
+
+const initialPostData = {
+  title: '',
+  message: '',
+  tags: '',
+  selectedFile: '',
+};
 
 const Form = () => {
   const { currentId, postsList } = useSelector((state) => state.posts);
+  const navigate = useNavigate();
   const postToUpdate = currentId
     ? postsList.find((post) => post._id === currentId)
     : null;
 
-  const initialPostData = {
-    title: '',
-    message: '',
-    tags: '',
-    selectedFile: '',
-  };
   const dispatch = useDispatch();
   const [postData, setPostData] = useState(initialPostData);
   const user = JSON.parse(localStorage.getItem('userInfo')) || null;
@@ -54,7 +60,12 @@ const Form = () => {
           })
         );
       } else {
-        dispatch(createPost({ ...postData, name: user?.result?.name }));
+        dispatch(
+          createPost({
+            newPost: { ...postData, name: user?.result?.name },
+            navigate,
+          })
+        );
       }
       clearForm();
     }
@@ -68,7 +79,7 @@ const Form = () => {
 
   if (!user?.result?.name) {
     return (
-      <Paper sx={formStyles.sxPaper}>
+      <Paper elevation={6} sx={formStyles.sxPaper}>
         <Typography variant="h6" align="center">
           Please Sign In to create your own echo and like other&apos;s echo.
         </Typography>
@@ -77,7 +88,7 @@ const Form = () => {
   }
 
   return (
-    <Paper sx={formStyles.sxPaper}>
+    <Paper sx={formStyles.sxPaper} elevation={6}>
       <form
         autoComplete="off"
         noValidate

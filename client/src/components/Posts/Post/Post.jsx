@@ -7,6 +7,7 @@ import {
   Button,
   Box,
   Typography,
+  ButtonBase,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -16,15 +17,21 @@ import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { setCurrentId } from '../../../features/posts/postsSlice.js';
 import { deletePost, likePost } from '../../../features/posts/postsSlice.js';
+import { useNavigate } from 'react-router-dom';
 
 const Post = ({ post }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('userInfo'));
   const isCreator =
     user?.result?._id === post?.creator || user?.result?.sub === post?.creator;
 
+  const openPost = () => {
+    navigate(`/allPosts/${post._id}`);
+  };
+
   return (
-    <Card sx={postStyles.card}>
+    <Card sx={postStyles.card} raised elevation={6}>
       <CardMedia
         sx={postStyles.media}
         image={
@@ -52,20 +59,26 @@ const Post = ({ post }) => {
           </Button>
         </Box>
       )}
-
-      <Box component="div" sx={postStyles.details}>
-        <Typography variant="body2" color="textSecondary">
-          {post.tags.map((tag) => `#${tag} `)}
+      <ButtonBase sx={postStyles.cardAction} onClick={openPost}>
+        <Box component="div" sx={postStyles.details}>
+          <Typography variant="body2" color="textSecondary">
+            {post.tags.map((tag) => `#${tag} `)}
+          </Typography>
+        </Box>
+        <Typography sx={postStyles.title} variant="h5" gutterBottom>
+          {post.title}
         </Typography>
-      </Box>
-      <Typography sx={postStyles.title} variant="h5" gutterBottom>
-        {post.title}
-      </Typography>
-      <CardContent>
-        <Typography color="textSecondary" component="p" variant="body2">
-          {post.message}
-        </Typography>
-      </CardContent>
+        <CardContent>
+          <Typography color="textSecondary" component="p" variant="body2">
+            {post.message.length > 125
+              ? post.message.slice(0, 125)
+              : post.message}
+            {post.message.length > 125 ? (
+              <Box component="strong">&nbsp;...</Box>
+            ) : null}
+          </Typography>
+        </CardContent>
+      </ButtonBase>
       <CardActions sx={postStyles.cardActions}>
         <Button
           size="small"
@@ -82,7 +95,7 @@ const Post = ({ post }) => {
             size="small"
             color="primary"
             onClick={() => {
-              dispatch(deletePost(post._id));
+              dispatch(deletePost({ id: post._id, navigate }));
             }}
           >
             <DeleteForeverIcon fontSize="small" color="warning" />
