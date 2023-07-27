@@ -104,3 +104,16 @@ export const likePost = async (req, res) => {
   });
   res.json(updatedPost);
 };
+
+export const commentPost = async (req, res) => {
+  const { id: _id } = req.params;
+  const { comment } = req.body;
+  if (!mongoose.Types.ObjectId.isValid(_id))
+    return res.status(404).send('No Post with that id');
+  const post = await PostMessage.findById(_id);
+  post.comments.push(comment);
+  const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, {
+    new: true,
+  });
+  res.json(updatedPost);
+};

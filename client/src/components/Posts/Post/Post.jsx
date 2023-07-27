@@ -26,8 +26,22 @@ const Post = ({ post }) => {
   const isCreator =
     user?.result?._id === post?.creator || user?.result?.sub === post?.creator;
 
+  const [likes, setLikes] = React.useState(post?.likes);
+
+  const userId = user?.result?.sub || user?.result?._id;
   const openPost = () => {
     navigate(`/allPosts/${post._id}`);
+  };
+
+  const handleLike = () => {
+    dispatch(likePost(post._id));
+
+    const hasLikedPost = post.likes.find((like) => like === userId);
+    if (hasLikedPost) {
+      setLikes(post.likes.filter((id) => id !== userId));
+    } else {
+      setLikes([...post.likes, userId]);
+    }
   };
 
   return (
@@ -83,12 +97,10 @@ const Post = ({ post }) => {
         <Button
           size="small"
           color="primary"
-          onClick={() => {
-            dispatch(likePost(post._id));
-          }}
+          onClick={handleLike}
           disabled={!user?.result}
         >
-          <Likes post={post} user={user} />
+          <Likes likes={likes} userId={userId} />
         </Button>
         {isCreator && (
           <Button

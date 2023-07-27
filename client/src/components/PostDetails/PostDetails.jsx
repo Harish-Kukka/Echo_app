@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import CommentSection from './CommentSection';
 import { useParams, useNavigate } from 'react-router-dom';
 import postDetailStyles from './styles.js';
 import { getPostById, getPostsBySearch } from '../../features/posts/postsSlice';
@@ -80,17 +81,15 @@ const PostDetails = () => {
           <Typography variant="body1">
             {moment(post.createdAt).fromNow()}
           </Typography>
-          <Divider sx={{ margin: '20px 0' }} />
+          {/* <Divider sx={{ margin: '20px 0' }} />
           <Typography variant="body1">
             <strong>Realtime Chat - coming soon!</strong>
-          </Typography>
-          <Divider sx={{ margin: '20px 0' }} />
-          <Typography variant="body1">
-            <strong>Comments - coming soon!</strong>
-          </Typography>
-          <Divider sx={{ margin: '20px 0' }} />
+          </Typography> */}
         </Box>
       </Box>
+      <Divider sx={{ margin: '20px 0' }} />
+      <CommentSection post={post} />
+      <Divider sx={{ margin: '20px 0' }} />
       {recommendedPosts.length > 0 && (
         <Box component="div" sx={styles.section}>
           <Typography gutterBottom variant="h5">
@@ -102,7 +101,11 @@ const PostDetails = () => {
               ({ title, message, name, likes, selectedFile, _id }) => (
                 <Box
                   component="div"
-                  sx={{ margin: '20px', cursor: 'pointer', width: '200px' }}
+                  sx={{
+                    margin: '20px 5px',
+                    cursor: 'pointer',
+                    width: '200px',
+                  }}
                   onClick={() => openPost(_id)}
                   key={_id}
                 >

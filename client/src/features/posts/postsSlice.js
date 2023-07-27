@@ -90,6 +90,18 @@ export const likePost = createAsyncThunk(
   }
 );
 
+export const commentPost = createAsyncThunk(
+  'posts/commentPost',
+  async ({ comment, id }, thunkAPI) => {
+    try {
+      const { data } = await api.comment(comment, id);
+      return data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(`${err.message}`);
+    }
+  }
+);
+
 const initialState = {
   postsList: [],
   post: {},
@@ -160,6 +172,11 @@ const postsSlice = createSlice({
         state.errorMessage = action.payload;
       })
       .addCase(updatePost.fulfilled, (state, action) => {
+        state.postsList = state.postsList.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        );
+      })
+      .addCase(commentPost.fulfilled, (state, action) => {
         state.postsList = state.postsList.map((post) =>
           post._id === action.payload._id ? action.payload : post
         );

@@ -1,22 +1,20 @@
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpAltOutlined from '@mui/icons-material/ThumbUpAltOutlined';
 
-const Likes = ({ post, user }) => {
-  if (post.likes.length > 0) {
-    return post.likes.find(
-      (like) => like === (user?.result?.sub || user?.result?._id)
-    ) ? (
+const Likes = ({ likes, userId }) => {
+  if (likes?.length > 0) {
+    return likes.find((like) => like === userId) ? (
       <>
         <ThumbUpAltIcon fontSize="small" />
         &nbsp;
-        {post.likes.length > 2
-          ? `You and ${post.likes.length - 1} others`
-          : `${post.likes.length} Like${post.likes.length > 1 ? 's' : ''}`}
+        {likes?.length > 2
+          ? `You and ${likes.length - 1} others`
+          : `${likes.length} Like${likes.length > 1 ? 's' : ''}`}
       </>
     ) : (
       <>
         <ThumbUpAltOutlined fontSize="small" />
-        &nbsp;{post.likes.length} {post.likes.length > 1 ? 'Likes' : 'Like'}
+        &nbsp;{likes.length} {likes.length > 1 ? 'Likes' : 'Like'}
       </>
     );
   }

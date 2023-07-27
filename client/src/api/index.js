@@ -29,6 +29,8 @@ export const updatePost = (id, updatedPost) =>
 export const deletePost = (id) => API.delete(`/posts/delete/${id}`);
 
 export const likePost = (id) => API.patch(`/posts/likePost/${id}`);
+export const comment = (comment, id) =>
+  API.post(`/posts/commentPost/${id}`, { comment });
 
 export const signIn = (formData) => API.post('user/signIn', formData);
 export const signUp = (formData) => API.post('/user/signUp', formData);

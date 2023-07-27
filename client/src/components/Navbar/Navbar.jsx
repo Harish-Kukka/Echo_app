@@ -22,6 +22,7 @@ const Navbar = () => {
   const navbarStyle = NavbarStyles(theme);
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('userInfo')) || null;
 

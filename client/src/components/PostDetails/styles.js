@@ -8,7 +8,7 @@ const postDetailStyles = (theme) => ({
   card: {
     display: 'flex',
     width: '100%',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexWrap: 'wrap',
       flexDirection: 'column',
     },
@@ -26,6 +26,7 @@ const postDetailStyles = (theme) => ({
   },
   recommendedPosts: {
     display: 'flex',
+    flexWrap: 'wrap',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
@@ -37,6 +38,24 @@ const postDetailStyles = (theme) => ({
     padding: '20px',
     borderRadius: '15px',
     height: '39vh',
+  },
+  commentsOuterContainer: {
+    display: 'flex',
+    // justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column-reverse',
+      width: '100%',
+    },
+  },
+  commentsInnerContainer: {
+    maxHeight: '200px',
+    overflowY: 'auto',
+    margin: '0 30px',
+  },
+  commentInputContainer: {
+    [theme.breakpoints.up('md')]: {
+      width: '50%',
+    },
   },
 });
 
