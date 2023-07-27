@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar/Navbar';
+import Footer from './Footer/Footer';
 
 const Layout = () => {
   const { errorMessage } = useSelector((state) => state.posts);
@@ -18,6 +19,7 @@ const Layout = () => {
         <>
           <Navbar />
           <Outlet />
+          <Footer />
         </>
       )}
     </Container>
